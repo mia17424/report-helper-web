@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车站信息汇报助手</title>
+    <!-- 引入样式文件 -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --main-color: #6C4EA2; /* 10号线罗兰紫 */
+            --accent-color: #F5A623; /* 橙黄高亮 */
+            --main-color-dark: #4B3570;
+            --accent-color-dark: #F5A623;
+            --bg-light: #F3F0FA;
+        }
+        body {
+            background: var(--bg-color, var(--bg-light));
+            transition: background 0.3s;
+        }
+        .app-titlebar {
+            height: 180px;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            background: var(--main-color);
+            color: #fff;
+            padding: 0 24px;
+            border-radius: 0 0 18px 18px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+        .app-titlebar .logo {
+            margin-right: 12px;
+            box-shadow: 0 2px 8px rgba(108,78,162,0.10);
+        }
+        .app-titlebar .title-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1;
+            white-space: nowrap;
+            height: 180px;
+            display: flex;
+            align-items: center;
+        }
+        .app-titlebar .window-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .app-titlebar .window-btns button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.18);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .app-titlebar .window-btns button:hover {
+            background: var(--accent-color);
+            color: var(--main-color);
+        }
+        .theme-toggle {
+            position: absolute;
+            right: 80px;
+            top: 10px;
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+        .main-card {
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            background: var(--card-bg, #fff);
+            padding: 32px 24px 24px 24px;
+            margin-bottom: 32px;
+            transition: background 0.3s;
+            max-width: 1600px;
+            width: 98vw;
+            margin: 32px auto 32px auto;
+            font-size: 1.25rem;
+        }
+        .welcome-area {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .welcome-area .welcome-logo {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 8px;
+            border: 3px solid var(--main-color);
+        }
+        .welcome-area h2 {
+            color: var(--main-color);
+        }
+        .tip-box {
+            background: #fff;
+            color: var(--main-color);
+            border: 2px solid var(--main-color);
+            border-radius: 12px;
+            padding: 10px 22px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.18rem;
+            box-shadow: 0 2px 8px rgba(108,78,162,0.08);
+            letter-spacing: 2px;
+        }
+        .tip-box .tip-keywords {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        .report-preview {
+            margin-top: 32px;
+            background: #f8fafc;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            padding: 24px;
+            transition: background 0.3s;
+        }
+        .preview-content {
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 120px;
+            font-family: 'Consolas', 'Menlo', 'monospace';
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+        }
+        .form-section {
+            background: var(--form-bg, var(--bg-light));
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 18px 18px 8px 18px;
+            margin-bottom: 18px;
+            transition: background 0.3s;
+        }
+        .form-label.required:after {
+            content: '*';
+            color: #e53e3e;
+            margin-left: 2px;
+        }
+        .select2-container .select2-selection--single {
+            height: 38px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 38px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 38px;
+        }
+        .btn-primary {
+            background: var(--main-color);
+            border-color: var(--main-color);
+        }
+        .btn-primary:hover, .btn-primary:focus {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--main-color);
+        }
+        .btn-success {
+            background: transparent; /* 生成报告使用描边风格 */
+            border-color: var(--main-color);
+            color: var(--main-color);
+        }
+        .btn-success:hover, .btn-success:focus {
+            background: var(--main-color); /* 悬停使用填充 */
+            border-color: var(--main-color);
+            color: #fff;
+        }
+        .btn-secondary {
+            background: transparent; /* 复制报告使用描边风格 */
+            border-color: var(--main-color);
+            color: var(--main-color);
+        }
+        .btn-secondary:hover, .btn-secondary:focus {
+            background: var(--main-color); /* 悬停使用填充 */
+            border-color: var(--main-color);
+            color: #fff;
+        }
+        .btn {
+            border-radius: 8px;
+            transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+        }
+        .btn:active {
+            box-shadow: 0 2px 8px rgba(91,63,162,0.15);
+        }
+        .footer {
+            text-align: center;
+            color: #888;
+            font-size: 0.98rem;
+            margin: 32px 0 12px 0;
+        }
+        .footer a {
+            color: var(--main-color);
+        }
+        /* Toast主题色 */
+        .toast.text-bg-primary {
+            background: var(--main-color)!important;
+            color: #fff!important;
+        }
+        .toast.text-bg-success {
+            background: var(--accent-color)!important;
+            color: var(--main-color)!important;
+        }
+        .toast.text-bg-danger {
+            background: #e53e3e!important;
+            color: #fff!important;
+        }
+        /* 波纹动画主色 */
+        .ripple {
+            background: rgba(108,78,162,0.18)!important;
+        }
+        /* 深色模式 */
+        body.dark {
+            --bg-color: #1a1a2e; /* 深邃背景 */
+            --card-bg: #2a2a4a; /* 卡片背景 */
+            --form-bg: #1a1a2e; /* 表单背景与主背景一致 */
+            --main-color-dark: #5b3f9a; /* 深色模式下的罗兰紫 */
+            --accent-color-dark: #f5a623; /* 橙黄高亮 */
+            color: #e5e7eb; /* 主文字颜色 */
+        }
+        body.dark .main-card,
+        body.dark .form-section {
+            background: var(--card-bg);
+        }
+        body.dark .report-preview {
+            background: var(--form-bg);
+        }
+        body.dark .preview-content {
+            background: var(--card-bg);
+        }
+        body.dark .tip-box {
+            background: var(--card-bg);
+            color: var(--accent-color-dark);
+            border: 2px solid var(--accent-color-dark);
+            box-shadow: 0 2px 8px rgba(245,166,35,0.2);
+        }
+        body.dark .footer {
+            color: #aaa;
+        }
+        body.dark .btn-primary {
+            background: var(--main-color-dark);
+            border-color: var(--main-color-dark);
+            color: #fff;
+        }
+        body.dark .btn-primary:hover, body.dark .btn-primary:focus {
+            background: var(--accent-color-dark);
+            border-color: var(--accent-color-dark);
+            color: var(--main-color-dark);
+        }
+        body.dark .btn-success {
+            background: transparent; /* 夜间模式生成报告使用描边风格 */
+            border-color: var(--main-color-dark);
+            color: var(--main-color-dark);
+        }
+        body.dark .btn-success:hover, body.dark .btn-success:focus {
+            background: var(--main-color-dark); /* 夜间模式悬停使用填充 */
+            border-color: var(--main-color-dark);
+            color: #fff;
+        }
+        body.dark .btn-secondary {
+            background: transparent; /* 夜间模式复制报告使用描边风格 */
+            border-color: var(--main-color-dark);
+            color: var(--main-color-dark);
+        }
+        body.dark .btn-secondary:hover, body.dark .btn-secondary:focus {
+            background: var(--main-color-dark); /* 夜间模式悬停使用填充 */
+            border-color: var(--main-color-dark);
+            color: #fff;
+        }
+        body.dark .footer a {
+            color: var(--accent-color-dark);
+        }
+        body.dark .ripple {
+            background: rgba(245,166,35,0.25)!important; /* 波纹颜色 */
+        }
+        body.dark .toast.text-bg-primary {
+            background: var(--main-color-dark)!important;
+            color: #fff!important;
+        }
+        body.dark .toast.text-bg-success {
+            background: var(--accent-color-dark)!important;
+            color: var(--main-color-dark)!important;
+        }
+        body.dark .station-label {
+            color: #fff;
+        }
+        .container {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .main-card {
+            width: 100%;
+            max-width: 1600px;
+            margin: 32px auto 32px auto;
+            padding: 0 24px 40px 24px;
+            font-size: 1.25rem;
+            box-sizing: border-box;
+        }
+        .report-type-selector .btn {
+            font-size: 1.35rem;
+            font-weight: bold;
+            padding: 1.1rem 1.5rem;
+            height: 64px;
+            border-radius: 24px;
+            margin: 0 18px;
+            box-shadow: 0 2px 8px rgba(108,78,162,0.10);
+            transition: box-shadow 0.2s, transform 0.18s, background 0.2s, color 0.2s;
+            letter-spacing: 2px;
+            /* 增加最小宽度，使其在堆叠时也能足够宽 */
+            min-width: 280px;
+        }
+        .report-type-selector .btn:hover, .report-type-selector .btn:focus {
+            box-shadow: 0 6px 18px rgba(108,78,162,0.18);
+            transform: translateY(-3px) scale(1.04);
+            z-index: 2;
+        }
+        .report-type-selector .row.g-3 {
+            gap: 0;
+            justify-content: center;
+        }
+        /* 调整按钮容器在小屏幕下的布局 */
+        .report-type-btns {
+            flex-direction: column;
+            align-items: center; /* 使按钮在垂直方向上居中对齐 */
+            gap: 18px; /* 增加按钮之间的垂直间距 */
+        }
+        .station-label {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .report-preview .btn {
+            font-size: 1.35rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .equipment-process-row {
+            display: flex;
+            align-items: center;
+            border: 2px solid #f44336;
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+        .equipment-process-row input[type="time"] {
+            width: 110px;
+            border: 1.5px solid #f44336;
+            border-radius: 6px;
+            margin-right: 6px;
+        }
+        .equipment-process-row input[type="text"] {
+            flex: 1;
+            border: 1.5px solid #f44336;
+            border-radius: 6px;
+        }
+        .equipment-process-row .delete-process-btn {
+            margin-left: 8px;
+            color: #f44336;
+            border: none;
+            background: transparent;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .equipment-process-row .delete-process-btn:hover {
+            color: #b71c1c;
+        }
+    </style>
+</head>
+<body>
+    <!-- 自定义顶部栏 -->
+    <div class="app-titlebar">
+        <div style="display:flex;align-items:center;">
+            <img src="logo.png" class="logo" alt="logo">
+        </div>
+        <span class="title-center">车站信息汇报助手</span>
+        <button class="btn btn-outline-light theme-toggle" id="themeToggle" title="切换主题">🌙</button>
+    </div>
+    <div class="container">
+        <div class="main-card">
+            <!-- 欢迎区 -->
+            <div class="欢迎使用">
+                <!-- 清理：确保此区域没有任何显示的文本或元素 -->
+            </div>
+            <!-- 页面头部 -->
+            <header class="text-center mb-4">
+                <!-- 站名选择区域 -->
+                <div class="station-name-input mb-3">
+                    <label for="stationName" class="form-label required station-label">站名</label>
+                    <select class="form-select" id="stationName" required onchange="handleStationChange()" style="width:100%">
+                        <option value="">请选择站名</option>
+                        <option value="兰花路">兰花路</option>
+                        <option value="南湖">南湖</option>
+                        <option value="万寿路">万寿路</option>
+                        <option value="后堡">后堡</option>
+                        <option value="七星岗">七星岗</option>
+                        <option value="大礼堂">大礼堂</option>
+                        <option value="manual">手动输入</option>
+                    </select>
+                    <input type="text" class="form-control mt-2" id="stationNameManual" placeholder="请输入站点名称" style="display:none;" onblur="handleManualBlur()">
+                </div>
+            </header>
+            <!-- 报告类型选择器 -->
+            <div class="report-type-selector mb-4">
+                <div class="report-type-btns">
+                    <div>
+                        <button class="btn btn-primary py-2" onclick="selectReportType('equipment')">设备故障汇报</button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-2" onclick="selectReportType('emergency')">突发事件汇报</button>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary py-2" onclick="selectReportType('inspection')">检查汇报</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 报告表单 -->
+            <form id="reportForm" class="report-form">
+                <!-- 设备故障表单 -->
+                <div id="equipmentForm" class="report-type-form form-section" style="display: none;">
+                    <div class="mb-3">
+                        <label for="equipmentTime" class="form-label">发生时间</label>
+                        <input type="datetime-local" class="form-control" id="equipmentTime" required>
+                        <div class="form-text">点击图标后选择时间点击"设置"</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentLocation" class="form-label">发生地点</label>
+                        <input type="text" class="form-control" id="equipmentLocation" required>
+                        <div class="form-text">请详细描述发生地点，如:站厅B端、下行站台12号门处等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentName" class="form-label">故障设备</label>
+                        <input type="text" class="form-control" id="equipmentName" required>
+                        <div class="form-text">描述故障设备名称及编号，如:上行2号站台门、P1805道岔、FT-DLT-T3-01等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentPhenomenon" class="form-label">故障现象</label>
+                        <textarea class="form-control" id="equipmentPhenomenon" rows="3" required></textarea>
+                        <div class="form-text">根据设备故障情况描述故障现象，如:站台门无法开启、道岔无法转换、电扶梯自行停止等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentImpact" class="form-label">影响情况</label>
+                        <textarea class="form-control" id="equipmentImpact" rows="3" required></textarea>
+                        <div class="form-text">描述故障对运营的影响，如:影响列车运行、影响乘客通行、影响设备正常使用等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">处理过程</label>
+                        <div id="equipmentProcessList"></div>
+                        <button type="button" class="btn btn-outline-danger mt-2" id="addProcessBtn">新增</button>
+                        <div class="form-text">每一行填写"时间+内容"，可增删。例：10:00发现故障、10:05报修等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentMeasures" class="form-label">当前措施</label>
+                        <textarea class="form-control" id="equipmentMeasures" rows="3" required></textarea>
+                        <div class="form-text">描述车站当前采取的临时措施，如:安全人员值守、组织乘客绕行、通知生产调度、行调等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentReporter" class="form-label">报告人</label>
+                        <input type="text" class="form-control" id="equipmentReporter" required>
+                        <div class="form-text">填写报告人姓名</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentReporterId" class="form-label">报告人工号</label>
+                        <input type="text" class="form-control" id="equipmentReporterId" required>
+                        <div class="form-text">填写报告人工号</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentReviewer" class="form-label">审核人</label>
+                        <input type="text" class="form-control" id="equipmentReviewer" required>
+                        <div class="form-text">填写审核人姓名</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="equipmentReviewerId" class="form-label">审核人工号</label>
+                        <input type="text" class="form-control" id="equipmentReviewerId" required>
+                        <div class="form-text">填写审核人工号</div>
+                    </div>
+                </div>
+                <!-- 突发事件表单 -->
+                <div id="emergencyForm" class="report-type-form form-section" style="display: none;">
+                    <div class="mb-3">
+                        <label for="emergencyTime" class="form-label">发生时间</label>
+                        <input type="datetime-local" class="form-control" id="emergencyTime" required>
+                        <div class="form-text">点击图标后选择时间点击"设置"</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyLocation" class="form-label">发生地点</label>
+                        <input type="text" class="form-control" id="emergencyLocation" required>
+                        <div class="form-text">请详细描述发生地点，如:站厅B端、下行站台12号门处等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyType" class="form-label">事件类型</label>
+                        <input type="text" class="form-control" id="emergencyType" required>
+                        <div class="form-text">请描述事件类型，如:客伤、水浸、舆情等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyDescription" class="form-label">事件描述</label>
+                        <textarea class="form-control" id="emergencyDescription" rows="3" required></textarea>
+                        <div class="form-text">描述事件情况，如:站厅B端发生客伤、站台水浸、舆情等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyImpact" class="form-label">影响情况</label>
+                        <textarea class="form-control" id="emergencyImpact" rows="3" required></textarea>
+                        <div class="form-text">描述事件对运营的影响，如:影响列车运行、影响乘客通行、可能造成投诉等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">处理过程</label>
+                        <div id="emergencyProcessList"></div>
+                        <button type="button" class="btn btn-outline-danger mt-2" id="addEmergencyProcessBtn">新增</button>
+                        <div class="form-text">每一行填写"时间+内容"，可增删。例：10:00发现、10:05通知等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyStatus" class="form-label">当前状态</label>
+                        <textarea class="form-control" id="emergencyStatus" rows="3" required></textarea>
+                        <div class="form-text">描述车站当前采取的临时措施，如:安全人员值守、组织乘客绕行、关停设备等。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyReporter" class="form-label">报告人</label>
+                        <input type="text" class="form-control" id="emergencyReporter" required>
+                        <div class="form-text">填写报告人姓名</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyReporterId" class="form-label">报告人工号</label>
+                        <input type="text" class="form-control" id="emergencyReporterId" required>
+                        <div class="form-text">填写报告人工号</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyReviewer" class="form-label">审核人</label>
+                        <input type="text" class="form-control" id="emergencyReviewer" required>
+                        <div class="form-text">填写审核人姓名</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emergencyReviewerId" class="form-label">审核人工号</label>
+                        <input type="text" class="form-control" id="emergencyReviewerId" required>
+                            <div class="form-text">填写审核人工号</div>
+                    </div>
+                </div>
+                <!-- 检查汇报表单 -->
+                <div id="inspectionForm" class="report-type-form form-section" style="display: none;">
+                    <div class="mb-3">
+                        <label for="inspectionTime" class="form-label">检查时间</label>
+                        <input type="datetime-local" class="form-control" id="inspectionTime" required>
+                        <div class="form-text">点击图标后选择时间点击"设置"</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inspectionPersonnel" class="form-label">检查人员</label>
+                        <input type="text" class="form-control" id="inspectionPersonnel" required>
+                        <div class="form-text">填写检查人员姓名</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inspectionContent" class="form-label">检查内容</label>
+                        <textarea class="form-control" id="inspectionContent" rows="5" required></textarea>
+                        <div class="form-text">描述检查种类（集团、轨道分局、轨道执法队、运管中心等）及检查项目</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inspectionProblems" class="form-label">检查发现问题</label>
+                        <textarea class="form-control" id="inspectionProblems" rows="5" required></textarea>
+                        <div class="form-text">描述记录的问题。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inspectionMeasures" class="form-label">整改措施</label>
+                        <textarea class="form-control" id="inspectionMeasures" rows="3" required></textarea>
+                        <div class="form-text">描述车站采取的整改措施。</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inspectionReporter" class="form-label">报告人</label>
+                        <input type="text" class="form-control" id="inspectionReporter" required>
+                        <div class="form-text">填写报告人姓名</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inspectionReporterId" class="form-label">报告人工号</label>
+                        <input type="text" class="form-control" id="inspectionReporterId" required>
+                        <div class="form-text">填写报告人工号</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inspectionReviewer" class="form-label">审核人</label>
+                        <input type="text" class="form-control" id="inspectionReviewer" required>
+                        <div class="form-text">填写审核人姓名</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inspectionReviewerId" class="form-label">审核人工号</label>
+                        <input type="text" class="form-control" id="inspectionReviewerId" required>
+                        <div class="form-text">填写审核人工号</div>
+                    </div>
+                </div>
+                <!-- 温馨提示区域 -->
+                <div class="text-center mb-4">
+                    <div class="tip-box">迅速、准确、真实</div>
+                </div>
+            </form>
+            <!-- 报告预览区域 -->
+            <div id="reportPreview" class="report-preview" style="display: none;">
+                <h3>报告预览</h3>
+                <div id="previewContent" class="preview-content"></div>
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="button" class="btn btn-success me-2" onclick="generateReport()">生成报告</button>
+                    <button type="button" class="btn btn-secondary" onclick="copyToClipboard()">复制报告</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Toast容器 -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="liveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMsg">Hello, world!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        &copy; 2025 汇报助手项目组 | <a href="#" style="color:#2563eb;text-decoration:underline;" data-bs-toggle="modal" data-bs-target="#helpModal">帮助</a>
+    </div>
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="helpModalLabel">汇报助手 使用指南</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <h4>项目简介</h4>
+            <p>"车站信息汇报助手"是一款面向地铁/车站工作人员的网页端信息汇报工具，支持设备故障、突发事件、检查汇报等多种标准化报告的快速生成，提升工作效率，减少人工书写错误。</p>
+
+            <h4>主要功能</h4>
+            <ul>
+              <li>支持 <b>设备故障汇报</b>、<b>突发事件汇报</b>、<b>检查汇报</b> 三种类型一键切换</li>
+              <li>"处理过程"支持多行动态填写（时间+内容），可随时增删</li>
+              <li>自动生成规范格式的汇报文本</li>
+              <li>一键复制报告内容，方便粘贴到其他系统</li>
+              <li>主题切换（明/暗色）</li>
+              <li>站名可下拉选择或手动输入</li>
+            </ul>
+
+            <h4>使用方法</h4>
+            <ol>
+              <li>打开网页，选择或输入站名</li>
+              <li>选择汇报类型（设备故障/突发事件/检查）</li>
+              <li>按提示填写表单内容，<b>处理过程可动态增删行</b>，每行填写"时间+内容"</li>
+              <li>填写完毕后，点击"生成报告"按钮，预览报告</li>
+              <li>检查无误后点击"复制报告"按钮，即可将报告内容复制到剪贴板</li>
+              <li>粘贴到你的通讯工具或其他系统即可</li>
+            </ol>
+
+            <h4>技术说明</h4>
+            <ul>
+                <li>前端技术：HTML5、CSS3、JavaScript（原生）、Bootstrap 5、jQuery、Select2</li>
+                <li>兼容主流浏览器（Chrome、Edge、Firefox等）</li>
+                <li>无需安装，直接网页访问</li>
+            </ul>
+
+            <h4>二次开发建议</h4>
+            <ul>
+                <li>可扩展更多汇报类型</li>
+                <li>可对接后端API实现数据存储</li>
+                <li>可增加导出Word、PDF等功能</li>
+            </ul>
+
+            <h4 class="mt-4">联系与技术支持</h4>
+            <p>如在使用过程中遇到任何问题或有改进建议，请联系软件作者邹建明：电话65975765、13527322993（微信同号）。</p>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 引入JavaScript文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // 主题切换
+        const themeBtn = document.getElementById('themeToggle');
+        themeBtn.onclick = function() {
+            document.body.classList.toggle('dark');
+            if(document.body.classList.contains('dark')){
+                themeBtn.innerText = '☀️';
+            }else{
+                themeBtn.innerText = '🌙';
+            }
+        };
+        // select2 汉化配置
+        $.fn.select2.amd.define('select2/i18n/zh-CN',[],function(){
+            return {
+                errorLoading:function(){return"无法载入结果。";},
+                inputTooLong:function(e){var t=e.input.length-e.maximum,n="请删除"+t+"个字符";return n},
+                inputTooShort:function(e){var t=e.minimum-e.input.length,n="请再输入至少"+t+"个字符";return n},
+                loadingMore:function(){return"载入更多结果…";},
+                maximumSelected:function(e){var t="最多只能选择"+e.maximum+"项";return t},
+                noResults:function(){return"未找到结果";},
+                searching:function(){return"搜索中…";},
+                removeAllItems:function(){return"删除所有项目";}
+            }
+        });
+        // 站名下拉搜索
+        $(function(){
+            $('#stationName').select2({
+                width: '100%',
+                placeholder: '请选择站名',
+                allowClear: true,
+                language: 'zh-CN'
+            });
+        });
+    </script>
+</body>
+</html> 

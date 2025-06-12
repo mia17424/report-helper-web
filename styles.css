@@ -1,0 +1,351 @@
+/* Flat Remix 风格重构 */
+body {
+    background: #f5f6fa;
+    font-family: system-ui, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #222;
+    margin: 0;
+}
+
+.app-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #6C4EA2;
+    color: #fff;
+    height: 64px;
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 4px 16px rgba(108,78,162,0.08);
+    padding: 0 20px;
+    margin-bottom: 24px;
+}
+.app-titlebar .logo {
+    max-height: 100%;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+    margin-right: 12px;
+    border-radius: 0;
+    box-shadow: 0 2px 8px rgba(108,78,162,0.10);
+}
+.title-center {
+    flex: 1;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.theme-toggle {
+    background: #fff;
+    color: #6C4EA2;
+    border: none;
+    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+    box-shadow: 0 2px 8px rgba(108,78,162,0.10);
+    transition: background 0.2s, color 0.2s;
+}
+.theme-toggle:hover {
+    background: #F5A623;
+    color: #fff;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 12px;
+}
+.main-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(108,78,162,0.10);
+    padding: 32px 24px 24px 24px;
+    margin-bottom: 32px;
+}
+
+.station-name-input {
+    max-width: 340px;
+    margin: 0 auto 24px auto;
+}
+.station-name-input .form-label {
+    font-size: 1.1rem;
+    color: #6C4EA2;
+    font-weight: 600;
+}
+.station-name-input .form-control {
+    border-radius: 12px;
+    border: 1.5px solid #e0e0e0;
+    font-size: 1rem;
+    padding: 10px 14px;
+    transition: border-color 0.2s;
+}
+.station-name-input .form-control:focus {
+    border-color: #6C4EA2;
+    box-shadow: 0 0 0 2px #e5e0f7;
+}
+
+.report-type-selector {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+.report-type-btns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+.report-type-btns .btn {
+    width: 180px;
+    min-width: 120px;
+    white-space: nowrap;
+    margin: 0;
+}
+.report-type-selector .btn:hover, .report-type-selector .btn:focus {
+    background: #F5A623;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(245,166,35,0.18);
+}
+
+.report-form {
+    background: #f8f9fa;
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(108,78,162,0.06);
+}
+.form-label {
+    font-weight: 600;
+    color: #6C4EA2;
+}
+.form-control {
+    border-radius: 12px;
+    border: 1.5px solid #e0e0e0;
+    padding: 10px 14px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+.form-control:focus {
+    border-color: #6C4EA2;
+    box-shadow: 0 0 0 2px #e5e0f7;
+}
+textarea.form-control {
+    min-height: 90px;
+}
+
+.btn-success, .btn-secondary {
+    border: none;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 12px 28px;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(108,78,162,0.10);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.btn-success {
+    background: #2ecc71;
+    color: #fff;
+}
+.btn-success:hover, .btn-success:focus {
+    background: #27ae60;
+    color: #fff;
+}
+.btn-secondary {
+    background: #F5A623;
+    color: #fff;
+}
+.btn-secondary:hover, .btn-secondary:focus {
+    background: #6C4EA2;
+    color: #fff;
+}
+
+.report-preview {
+    background: #fff;
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(108,78,162,0.08);
+    margin-top: 30px;
+}
+.preview-content {
+    white-space: pre-wrap;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'monospace';
+    line-height: 1.6;
+    padding: 18px;
+    background: #f5f6fa;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.tip-box {
+    background: #eaf6ff;
+    color: #6C4EA2;
+    border-radius: 12px;
+    padding: 12px 0;
+    font-size: 1.15rem;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(108,78,162,0.04);
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+
+.footer {
+    text-align: center;
+    color: #888;
+    font-size: 1rem;
+    margin: 32px 0 12px 0;
+}
+.footer a {
+    color: #6C4EA2;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.report-preview .text-center, .main-card .text-center {
+    text-align: center !important;
+}
+.report-preview .btn, .main-card .btn, .report-form .btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    max-width: 400px;
+}
+
+/* 响应式优化 */
+@media (max-width: 600px) {
+    .app-titlebar {
+        height: 52px;
+        min-height: 52px;
+        padding: 0 6px;
+        border-radius: 0 0 12px 12px;
+        margin-bottom: 10px;
+    }
+    .app-titlebar .logo {
+        max-height: 52px;
+        width: auto;
+    }
+    .title-center {
+        font-size: 4.5vw !important;
+    }
+    .main-card {
+        padding: 10px 2px 16px 2px;
+        border-radius: 10px;
+    }
+    .report-type-btns {
+        gap: 18px;
+    }
+    .report-type-btns .btn {
+        width: 100% !important;
+        max-width: 95vw !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        font-size: 1.1rem;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+    .report-form, .report-preview {
+        padding: 8px;
+        border-radius: 8px;
+    }
+    .btn, .report-preview .btn {
+        font-size: 1rem;
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+    .footer {
+        font-size: 0.85rem;
+        margin: 12px 0 6px 0;
+    }
+    .tip-box {
+        font-size: 1rem;
+        padding: 8px 0;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-titlebar {
+        height: 16vw;
+        min-height: 16vw;
+        padding: 0 2vw;
+        border-radius: 0 0 4vw 4vw;
+        margin-bottom: 2vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .app-titlebar .logo {
+        max-height: 16vw;
+        width: auto;
+    }
+    .title-center {
+        font-size: 6vw !important;
+        height: 16vw !important;
+        line-height: 16vw !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: static !important;
+        transform: none !important;
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+    }
+    .main-card {
+        padding: 0 1vw 2vw 1vw;
+        font-size: 3.5vw;
+        margin: 2vw auto 2vw auto;
+        border-radius: 2vw;
+    }
+    .report-type-selector .btn {
+        font-size: 3.5vw;
+        padding: 2vw 0;
+        height: 8vw;
+        border-radius: 3vw;
+        margin: 0 1vw 2vw 1vw;
+        min-width: 90px;
+    }
+    .form-label, .station-label {
+        font-size: 3vw;
+    }
+    .form-control {
+        font-size: 3vw;
+        padding: 1vw;
+    }
+    .report-form, .report-preview {
+        padding: 1.5vw;
+        border-radius: 2vw;
+    }
+    .btn, .report-preview .btn {
+        font-size: 3vw;
+        padding: 1.5vw 2vw;
+        border-radius: 2vw;
+    }
+    .footer {
+        font-size: 2vw;
+        margin: 2vw 0 1vw 0;
+    }
+    .tip-box {
+        font-size: 3vw;
+        padding: 1vw 0;
+        border-radius: 2vw;
+    }
+}
+
+@media (max-width: 375px) {
+    .app-titlebar {
+        height: 48px;
+        min-height: 48px;
+        padding: 0 4px;
+    }
+    .app-titlebar .logo {
+        max-height: 48px;
+        width: auto;
+    }
+    .title-center {
+        font-size: 0.95rem;
+    }
+} 

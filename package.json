@@ -1,0 +1,35 @@
+{
+  "name": "report-assistant-pc",
+  "version": "1.0.0",
+  "description": "基于 Electron 的汇报助手桌面版",
+  "main": "main.js",
+  "author": "Your Name",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron": "^28.2.3",
+    "electron-builder": "^26.0.12",
+    "install": "^0.13.0"
+  },
+  "build": {
+    "appId": "com.yourcompany.reportassistant",
+    "productName": "汇报助手",
+    "copyright": "Copyright © 2024 ${author}",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "logo.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
