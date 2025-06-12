@@ -173,7 +173,67 @@ function generateEmergencyReport(stationName) {
 }
 
 /**
- * 生成检查汇报
+ * 检查汇报动态序号输入行逻辑
+ * @param {number} index - 序号
+ * @param {string} value - 检查内容
+ * @param {string} listType - 列表类型
+ * @returns {HTMLDivElement} 动态输入行
+ */
+function createInspectionRow(index, value = '', listType) {
+    const row = document.createElement('div');
+    row.className = 'inspection-list-row';
+    row.innerHTML = `
+        <span class="inspection-index">${index}.</span>
+        <input type="text" class="form-control inspection-desc" placeholder="请输入内容" value="${value}" required>
+        <button type="button" class="delete-inspection-btn" title="删除">✖</button>
+    `;
+    row.querySelector('.delete-inspection-btn').onclick = function() {
+        row.remove();
+        updateInspectionIndexes(listType);
+    };
+    return row;
+}
+
+/**
+ * 更新检查序号
+ * @param {string} listType - 列表类型
+ */
+function updateInspectionIndexes(listType) {
+    const list = document.getElementById(listType);
+    Array.from(list.children).forEach((row, idx) => {
+        const indexSpan = row.querySelector('.inspection-index');
+        if(indexSpan) indexSpan.textContent = (idx + 1) + '.';
+    });
+}
+
+/**
+ * 添加检查行
+ * @param {string} listType - 列表类型
+ * @param {string} value - 检查内容
+ */
+function addInspectionRow(listType, value = '') {
+    const list = document.getElementById(listType);
+    const index = list.children.length + 1;
+    list.appendChild(createInspectionRow(index, value, listType));
+}
+
+/**
+ * 初始化检查按钮和默认一行
+ */
+const inspectionListTypes = [
+    {btn: 'addInspectionContentBtn', list: 'inspectionContentList'},
+    {btn: 'addInspectionProblemsBtn', list: 'inspectionProblemsList'},
+    {btn: 'addInspectionMeasuresBtn', list: 'inspectionMeasuresList'}
+];
+inspectionListTypes.forEach(({btn, list}) => {
+    if(document.getElementById(btn)) {
+        document.getElementById(btn).onclick = function() { addInspectionRow(list); };
+        if(document.getElementById(list).children.length === 0) addInspectionRow(list);
+    }
+});
+
+/**
+ * 修改生成检查汇报逻辑，拼接所有动态行
  * @param {string} stationName - 站名
  * @returns {string} 检查汇报内容
  */
@@ -184,18 +244,52 @@ function generateInspectionReport(stationName) {
         reviewer: document.getElementById('inspectionReviewer').value,
         reviewerId: document.getElementById('inspectionReviewerId').value,
     };
-
-    return `${stationName}站报：
-一、检查时间：${formatDateTime(document.getElementById('inspectionTime').value)}
-二、检查人员：${document.getElementById('inspectionPersonnel').value}
-三、检查内容：
-${document.getElementById('inspectionContent').value}
-四、检查发现问题：
-${document.getElementById('inspectionProblems').value}
-五、整改措施：
-${document.getElementById('inspectionMeasures').value}
-六、报告人：值班员：${inspectionData.reporter}（${inspectionData.reporterId}）
-七、审核人：值班站长：${inspectionData.reviewer}（${inspectionData.reviewerId}）`;
+    // 检查内容
+    let contentArr = [];
+    document.querySelectorAll('#inspectionContentList .inspection-list-row').forEach(row => {
+        const desc = row.querySelector('.inspection-desc').value.trim();
+        if(desc) contentArr.push(desc);
+    });
+    let contentText = '';
+    if(contentArr.length === 1) {
+        contentText = contentArr[0];
+    } else {
+        contentArr.forEach((desc, idx) => {
+            contentText += `${idx+1}. ${desc}\n`;
+        });
+        contentText = contentText.trim();
+    }
+    // 检查发现问题
+    let problemsArr = [];
+    document.querySelectorAll('#inspectionProblemsList .inspection-list-row').forEach(row => {
+        const desc = row.querySelector('.inspection-desc').value.trim();
+        if(desc) problemsArr.push(desc);
+    });
+    let problemsText = '';
+    if(problemsArr.length === 1) {
+        problemsText = problemsArr[0];
+    } else {
+        problemsArr.forEach((desc, idx) => {
+            problemsText += `${idx+1}. ${desc}\n`;
+        });
+        problemsText = problemsText.trim();
+    }
+    // 整改措施
+    let measuresArr = [];
+    document.querySelectorAll('#inspectionMeasuresList .inspection-list-row').forEach(row => {
+        const desc = row.querySelector('.inspection-desc').value.trim();
+        if(desc) measuresArr.push(desc);
+    });
+    let measuresText = '';
+    if(measuresArr.length === 1) {
+        measuresText = measuresArr[0];
+    } else {
+        measuresArr.forEach((desc, idx) => {
+            measuresText += `${idx+1}. ${desc}\n`;
+        });
+        measuresText = measuresText.trim();
+    }
+    return `${stationName}站报：\n一、检查时间：${formatDateTime(document.getElementById('inspectionTime').value)}\n二、检查人员：${document.getElementById('inspectionPersonnel').value}\n三、检查内容：\n${contentText}\n四、检查发现问题：\n${problemsText}\n五、整改措施：\n${measuresText}\n六、报告人：值班员：${inspectionData.reporter}（${inspectionData.reporterId}）\n七、审核人：值班站长：${inspectionData.reviewer}（${inspectionData.reviewerId}）`;
 }
 
 /**

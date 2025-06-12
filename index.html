@@ -223,81 +223,6 @@
         .ripple {
             background: rgba(108,78,162,0.18)!important;
         }
-        /* 深色模式 */
-        body.dark {
-            --bg-color: #1a1a2e; /* 深邃背景 */
-            --card-bg: #2a2a4a; /* 卡片背景 */
-            --form-bg: #1a1a2e; /* 表单背景与主背景一致 */
-            --main-color-dark: #5b3f9a; /* 深色模式下的罗兰紫 */
-            --accent-color-dark: #f5a623; /* 橙黄高亮 */
-            color: #e5e7eb; /* 主文字颜色 */
-        }
-        body.dark .main-card,
-        body.dark .form-section {
-            background: var(--card-bg);
-        }
-        body.dark .report-preview {
-            background: var(--form-bg);
-        }
-        body.dark .preview-content {
-            background: var(--card-bg);
-        }
-        body.dark .tip-box {
-            background: var(--card-bg);
-            color: var(--accent-color-dark);
-            border: 2px solid var(--accent-color-dark);
-            box-shadow: 0 2px 8px rgba(245,166,35,0.2);
-        }
-        body.dark .footer {
-            color: #aaa;
-        }
-        body.dark .btn-primary {
-            background: var(--main-color-dark);
-            border-color: var(--main-color-dark);
-            color: #fff;
-        }
-        body.dark .btn-primary:hover, body.dark .btn-primary:focus {
-            background: var(--accent-color-dark);
-            border-color: var(--accent-color-dark);
-            color: var(--main-color-dark);
-        }
-        body.dark .btn-success {
-            background: transparent; /* 夜间模式生成报告使用描边风格 */
-            border-color: var(--main-color-dark);
-            color: var(--main-color-dark);
-        }
-        body.dark .btn-success:hover, body.dark .btn-success:focus {
-            background: var(--main-color-dark); /* 夜间模式悬停使用填充 */
-            border-color: var(--main-color-dark);
-            color: #fff;
-        }
-        body.dark .btn-secondary {
-            background: transparent; /* 夜间模式复制报告使用描边风格 */
-            border-color: var(--main-color-dark);
-            color: var(--main-color-dark);
-        }
-        body.dark .btn-secondary:hover, body.dark .btn-secondary:focus {
-            background: var(--main-color-dark); /* 夜间模式悬停使用填充 */
-            border-color: var(--main-color-dark);
-            color: #fff;
-        }
-        body.dark .footer a {
-            color: var(--accent-color-dark);
-        }
-        body.dark .ripple {
-            background: rgba(245,166,35,0.25)!important; /* 波纹颜色 */
-        }
-        body.dark .toast.text-bg-primary {
-            background: var(--main-color-dark)!important;
-            color: #fff!important;
-        }
-        body.dark .toast.text-bg-success {
-            background: var(--accent-color-dark)!important;
-            color: var(--main-color-dark)!important;
-        }
-        body.dark .station-label {
-            color: #fff;
-        }
         .container {
             width: 100vw !important;
             max-width: 100vw !important;
@@ -312,33 +237,43 @@
             font-size: 1.25rem;
             box-sizing: border-box;
         }
+        .report-type-selector {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .report-type-btns {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+        .report-type-btns > div {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
         .report-type-selector .btn {
+            width: 320px;
+            min-width: 320px;
+            max-width: 320px;
             font-size: 1.35rem;
             font-weight: bold;
             padding: 1.1rem 1.5rem;
             height: 64px;
-            border-radius: 24px;
-            margin: 0 18px;
+            border-radius: 24px !important;
+            margin: 0;
             box-shadow: 0 2px 8px rgba(108,78,162,0.10);
             transition: box-shadow 0.2s, transform 0.18s, background 0.2s, color 0.2s;
             letter-spacing: 2px;
-            /* 增加最小宽度，使其在堆叠时也能足够宽 */
-            min-width: 280px;
+            display: block;
         }
-        .report-type-selector .btn:hover, .report-type-selector .btn:focus {
-            box-shadow: 0 6px 18px rgba(108,78,162,0.18);
-            transform: translateY(-3px) scale(1.04);
-            z-index: 2;
-        }
-        .report-type-selector .row.g-3 {
-            gap: 0;
-            justify-content: center;
-        }
-        /* 调整按钮容器在小屏幕下的布局 */
-        .report-type-btns {
-            flex-direction: column;
-            align-items: center; /* 使按钮在垂直方向上居中对齐 */
-            gap: 18px; /* 增加按钮之间的垂直间距 */
+        @media (max-width: 400px) {
+            .report-type-selector .btn {
+                width: 98vw;
+                min-width: 0;
+                max-width: 100vw;
+            }
         }
         .station-label {
             font-size: 1.5rem;
@@ -383,6 +318,41 @@
         .equipment-process-row .delete-process-btn:hover {
             color: #b71c1c;
         }
+        .inspection-list-row {
+            display: flex;
+            align-items: center;
+            border: 2px solid #6C4EA2;
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin-bottom: 8px;
+            gap: 10px;
+            background: #fff;
+        }
+        .inspection-list-row .inspection-index {
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: #6C4EA2;
+            margin-right: 10px;
+            min-width: 32px;
+            text-align: right;
+        }
+        .inspection-list-row input[type="text"] {
+            flex: 1;
+            border: 1.5px solid #6C4EA2;
+            border-radius: 6px;
+        }
+        .inspection-list-row .delete-inspection-btn {
+            margin-left: 8px;
+            color: #6C4EA2;
+            border: none;
+            background: transparent;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .inspection-list-row .delete-inspection-btn:hover {
+            color: #4B3570;
+        }
     </style>
 </head>
 <body>
@@ -392,7 +362,6 @@
             <img src="logo.png" class="logo" alt="logo">
         </div>
         <span class="title-center">车站信息汇报助手</span>
-        <button class="btn btn-outline-light theme-toggle" id="themeToggle" title="切换主题">🌙</button>
     </div>
     <div class="container">
         <div class="main-card">
@@ -566,18 +535,21 @@
                     </div>
                     <div class="mb-3">
                         <label for="inspectionContent" class="form-label">检查内容</label>
-                        <textarea class="form-control" id="inspectionContent" rows="5" required></textarea>
-                        <div class="form-text">描述检查种类（集团、轨道分局、轨道执法队、运管中心等）及检查项目</div>
+                        <div id="inspectionContentList"></div>
+                        <button type="button" class="btn btn-outline-danger mt-2" id="addInspectionContentBtn">新增</button>
+                        <div class="form-text">每一项填写检查内容，支持多项，点击新增自动编号。</div>
                     </div>
                     <div class="mb-3">
                         <label for="inspectionProblems" class="form-label">检查发现问题</label>
-                        <textarea class="form-control" id="inspectionProblems" rows="5" required></textarea>
-                        <div class="form-text">描述记录的问题。</div>
+                        <div id="inspectionProblemsList"></div>
+                        <button type="button" class="btn btn-outline-danger mt-2" id="addInspectionProblemsBtn">新增</button>
+                        <div class="form-text">每一项填写发现的问题，支持多项，点击新增自动编号。</div>
                     </div>
                     <div class="mb-3">
                         <label for="inspectionMeasures" class="form-label">整改措施</label>
-                        <textarea class="form-control" id="inspectionMeasures" rows="3" required></textarea>
-                        <div class="form-text">描述车站采取的整改措施。</div>
+                        <div id="inspectionMeasuresList"></div>
+                        <button type="button" class="btn btn-outline-danger mt-2" id="addInspectionMeasuresBtn">新增</button>
+                        <div class="form-text">每一项填写整改措施，支持多项，点击新增自动编号。</div>
                     </div>
                     <div class="mb-3">
                         <label for="inspectionReporter" class="form-label">报告人</label>
@@ -689,16 +661,6 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="script.js"></script>
     <script>
-        // 主题切换
-        const themeBtn = document.getElementById('themeToggle');
-        themeBtn.onclick = function() {
-            document.body.classList.toggle('dark');
-            if(document.body.classList.contains('dark')){
-                themeBtn.innerText = '☀️';
-            }else{
-                themeBtn.innerText = '🌙';
-            }
-        };
         // select2 汉化配置
         $.fn.select2.amd.define('select2/i18n/zh-CN',[],function(){
             return {
