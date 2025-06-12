@@ -302,11 +302,20 @@
         .inspection-list-row {
             border: 2px solid #6C4EA2;
         }
-        .equipment-process-row input[type="time"],
-        .inspection-list-row .inspection-index {
-            min-width: 38px;
-            width: auto;
-            text-align: right;
+        .equipment-process-row input[type="time"] {
+            min-width: 70px;
+            width: 110px;
+            max-width: 100%;
+            border: 1.5px solid #f44336;
+            border-radius: 6px;
+            margin-right: 6px;
+            text-align: center;
+            display: inline-block;
+        }
+        .inspection-list-row input[type="text"] {
+            flex: 1 1 0%;
+            min-width: 0;
+            border-radius: 6px;
         }
         .equipment-process-row input[type="text"],
         .inspection-list-row input[type="text"] {
@@ -344,10 +353,14 @@
                 padding: 4px 2vw;
                 gap: 6px;
             }
-            .equipment-process-row input[type="time"],
-            .inspection-list-row .inspection-index {
-                min-width: 28px;
-                font-size: 1.1rem;
+            .equipment-process-row input[type="time"] {
+                min-width: 0;
+                width: 22vw;
+                max-width: 30vw;
+                font-size: 1rem;
+                padding-left: 0;
+                padding-right: 0;
+                text-align: center;
             }
             .equipment-process-row input[type="text"],
             .inspection-list-row input[type="text"] {
