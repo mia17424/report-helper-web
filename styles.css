@@ -348,4 +348,20 @@ textarea.form-control {
     .title-center {
         font-size: 0.95rem;
     }
-} 
+}
+
+/* 汇报类型主按钮：重庆地铁10号线罗兰紫 */
+.btn-primary {
+    background: #6C4EA2 !important; /* 罗兰紫主色 */
+    border-color: #6C4EA2 !important;
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(108,78,162,0.10);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover, .btn-primary:focus {
+    background: #4B3570 !important; /* 罗兰紫加深 */
+    border-color: #4B3570 !important;
+    color: #fff !important;
+}
+/* 保证按钮在所有分辨率下主色一致 */ 
