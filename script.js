@@ -184,13 +184,19 @@ function createInspectionRow(index, value = '', listType) {
     row.className = 'inspection-list-row';
     row.innerHTML = `
         <span class="inspection-index">${index}.</span>
-        <input type="text" class="form-control inspection-desc" placeholder="请输入内容" value="${value}" required>
+        <textarea class="form-control inspection-desc" placeholder="请输入内容" required style="min-height:2.4em;resize:vertical;overflow-y:auto;">${value}</textarea>
         <button type="button" class="delete-inspection-btn" title="删除">✖</button>
     `;
     row.querySelector('.delete-inspection-btn').onclick = function() {
         row.remove();
         updateInspectionIndexes(listType);
     };
+    // 绑定自适应高度
+    const textarea = row.querySelector('.inspection-desc');
+    textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
     return row;
 }
 
@@ -437,12 +443,18 @@ function createProcessRow(time = '', desc = '') {
     row.className = 'equipment-process-row';
     row.innerHTML = `
         <input type="time" class="form-control process-time" value="${time}" required>
-        <input type="text" class="form-control process-desc" placeholder="请输入描述" value="${desc}" required>
+        <textarea class="form-control process-desc" placeholder="请输入描述" required style="min-height:2.4em;resize:vertical;overflow-y:auto;">${desc}</textarea>
         <button type="button" class="delete-process-btn" title="删除">✖</button>
     `;
     row.querySelector('.delete-process-btn').onclick = function() {
         row.remove();
     };
+    // 绑定自适应高度
+    const textarea = row.querySelector('.process-desc');
+    textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
     return row;
 }
 
@@ -467,12 +479,18 @@ function createEmergencyProcessRow(time = '', desc = '') {
     row.className = 'equipment-process-row';
     row.innerHTML = `
         <input type="time" class="form-control process-time" value="${time}" required>
-        <input type="text" class="form-control process-desc" placeholder="请输入描述" value="${desc}" required>
+        <textarea class="form-control process-desc" placeholder="请输入描述" required style="min-height:2.4em;resize:vertical;overflow-y:auto;">${desc}</textarea>
         <button type="button" class="delete-process-btn" title="删除">✖</button>
     `;
     row.querySelector('.delete-process-btn').onclick = function() {
         row.remove();
     };
+    // 绑定自适应高度
+    const textarea = row.querySelector('.process-desc');
+    textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
     return row;
 }
 

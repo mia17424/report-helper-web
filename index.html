@@ -286,24 +286,32 @@
             font-weight: bold;
             letter-spacing: 2px;
         }
-        .equipment-process-row {
+        .equipment-process-row,
+        .inspection-list-row {
             display: flex;
             align-items: center;
-            border: 2px solid #f44336;
             border-radius: 8px;
             padding: 6px 10px;
             margin-bottom: 8px;
             gap: 10px;
+            background: #fff;
         }
-        .equipment-process-row input[type="time"] {
-            width: 110px;
-            border: 1.5px solid #f44336;
-            border-radius: 6px;
-            margin-right: 6px;
+        .equipment-process-row {
+            border: 2px solid #f44336;
         }
-        .equipment-process-row input[type="text"] {
-            flex: 1;
-            border: 1.5px solid #f44336;
+        .inspection-list-row {
+            border: 2px solid #6C4EA2;
+        }
+        .equipment-process-row input[type="time"],
+        .inspection-list-row .inspection-index {
+            min-width: 38px;
+            width: auto;
+            text-align: right;
+        }
+        .equipment-process-row input[type="text"],
+        .inspection-list-row input[type="text"] {
+            flex: 1 1 0%;
+            min-width: 0;
             border-radius: 6px;
         }
         .equipment-process-row .delete-process-btn {
@@ -318,29 +326,6 @@
         .equipment-process-row .delete-process-btn:hover {
             color: #b71c1c;
         }
-        .inspection-list-row {
-            display: flex;
-            align-items: center;
-            border: 2px solid #6C4EA2;
-            border-radius: 8px;
-            padding: 6px 10px;
-            margin-bottom: 8px;
-            gap: 10px;
-            background: #fff;
-        }
-        .inspection-list-row .inspection-index {
-            font-weight: bold;
-            font-size: 1.25rem;
-            color: #6C4EA2;
-            margin-right: 10px;
-            min-width: 32px;
-            text-align: right;
-        }
-        .inspection-list-row input[type="text"] {
-            flex: 1;
-            border: 1.5px solid #6C4EA2;
-            border-radius: 6px;
-        }
         .inspection-list-row .delete-inspection-btn {
             margin-left: 8px;
             color: #6C4EA2;
@@ -352,6 +337,24 @@
         }
         .inspection-list-row .delete-inspection-btn:hover {
             color: #4B3570;
+        }
+        @media (max-width: 600px) {
+            .equipment-process-row,
+            .inspection-list-row {
+                padding: 4px 2vw;
+                gap: 6px;
+            }
+            .equipment-process-row input[type="time"],
+            .inspection-list-row .inspection-index {
+                min-width: 28px;
+                font-size: 1.1rem;
+            }
+            .equipment-process-row input[type="text"],
+            .inspection-list-row input[type="text"] {
+                font-size: 1rem;
+                padding-left: 6px;
+                padding-right: 6px;
+            }
         }
     </style>
 </head>
