@@ -147,7 +147,7 @@ function generateEquipmentReport(stationName) {
     });
     processText = processText.trim();
     // 拼接所有内容
-    return `${stationName}站报(设备故障)：\n一、发生时间：${formatDateTime(document.getElementById('equipmentTime').value)}\n二、发生地点：${document.getElementById('equipmentLocation').value}\n三、故障设备：${document.getElementById('equipmentName').value}\n四、故障现象：${document.getElementById('equipmentPhenomenon').value}\n五、影响情况：${document.getElementById('equipmentImpact').value}\n六、处理过程：\n${processText}\n七、当前措施：\n${document.getElementById('equipmentMeasures').value}\n八、报告人：值班员：${document.getElementById('equipmentReporter').value}（${document.getElementById('equipmentReporterId').value}）\n九、审核人：值班站长：${document.getElementById('equipmentReviewer').value}（${document.getElementById('equipmentReviewerId').value}）`;
+    return `${stationName}站报：\n一、发生时间：${formatDateTime(document.getElementById('equipmentTime').value)}\n二、发生地点：${document.getElementById('equipmentLocation').value}\n三、故障设备：${document.getElementById('equipmentName').value}\n四、故障现象：${document.getElementById('equipmentPhenomenon').value}\n五、影响内容：${document.getElementById('equipmentImpact').value}\n六、处理过程：\n${processText}\n七、当前措施：\n${document.getElementById('equipmentMeasures').value}\n八、报告人：值班员：${document.getElementById('equipmentReporter').value}（${document.getElementById('equipmentReporterId').value}）\n九、审核人：值班站长：${document.getElementById('equipmentReviewer').value}（${document.getElementById('equipmentReviewerId').value}）`;
 }
 
 /**
@@ -174,8 +174,8 @@ function generateEmergencyReport(stationName) {
         }
     });
     processText = processText.trim();
-    // 拼接所有内容
-    return `${stationName}站报（突发事件）：\n一、发生时间：${formatDateTime(document.getElementById('emergencyTime').value)}\n二、发生地点：${document.getElementById('emergencyLocation').value}\n三、事件类型：${document.getElementById('emergencyType').value}\n四、事件描述：${document.getElementById('emergencyDescription').value}\n五、影响情况：${document.getElementById('emergencyImpact').value}\n六、处理过程：\n${processText}\n七、当前状态：\n${document.getElementById('emergencyStatus').value}\n八、报告人：值班员：${emergencyData.reporter}（${emergencyData.reporterId}）\n九、审核人：值班站长：${emergencyData.reviewer}（${emergencyData.reviewerId}）`;
+    // 拼接所有内容（已去除事件描述和当前状态，处理过程已改为关键节点）
+    return `${stationName}站报：\n一、发生时间：${formatDateTime(document.getElementById('emergencyTime').value)}\n二、发生地点：${document.getElementById('emergencyLocation').value}\n三、事件原因：${document.getElementById('emergencyType').value}\n四、影响内容：${document.getElementById('emergencyImpact').value}\n五、关键节点：\n${processText}\n六、报告人：值班员：${emergencyData.reporter}（${emergencyData.reporterId}）\n七、审核人：值班站长：${emergencyData.reviewer}（${emergencyData.reviewerId}）`;
 }
 
 /**
@@ -305,7 +305,7 @@ function generateInspectionReport(stationName) {
         measuresText = measuresText.trim();
     }
     // 拼接所有内容
-    return `${stationName}站报：\n一、检查时间：${formatDateTime(document.getElementById('inspectionTime').value)}\n二、检查人员：${document.getElementById('inspectionPersonnel').value}\n三、检查内容：\n${contentText}\n四、检查发现问题：\n${problemsText}\n五、整改措施：\n${measuresText}\n六、报告人：值班员：${inspectionData.reporter}（${inspectionData.reporterId}）\n七、审核人：值班站长：${inspectionData.reviewer}（${inspectionData.reviewerId}）`;
+    return `${stationName}站报：\n一、检查时间：${formatDateTime(document.getElementById('inspectionTime').value)}\n二、检查人员及检查类别：${document.getElementById('inspectionPersonnel').value}\n三、检查内容：\n${contentText}\n四、检查发现问题：\n${problemsText}\n五、整改措施：\n${measuresText}\n六、报告人：值班员：${inspectionData.reporter}（${inspectionData.reporterId}）\n七、审核人：值班站长：${inspectionData.reviewer}（${inspectionData.reviewerId}）`;
 }
 
 /**

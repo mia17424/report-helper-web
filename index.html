@@ -265,9 +265,9 @@
                         <textarea class="form-control" id="equipmentPhenomenon" rows="3" required></textarea>
                         <div class="form-text">根据设备故障情况描述故障现象，如:站台门无法开启、道岔无法转换、电扶梯自行停止等。</div>
                     </div>
-                    <!-- 影响情况：说明对运营的影响 -->
+                    <!-- 影响内容：说明对运营的影响 -->
                     <div class="mb-3">
-                        <label for="equipmentImpact" class="form-label">影响情况</label>
+                        <label for="equipmentImpact" class="form-label">影响内容</label>
                         <textarea class="form-control" id="equipmentImpact" rows="3" required></textarea>
                         <div class="form-text">描述故障对运营的影响，如:影响列车运行、影响乘客通行、影响设备正常使用等。</div>
                     </div>
@@ -320,36 +320,24 @@
                         <input type="text" class="form-control" id="emergencyLocation" required>
                         <div class="form-text">请详细描述发生地点，如:站厅B端、下行站台12号门处等。</div>
                     </div>
-                    <!-- 事件类型：填写事件类型，如客伤、水浸等 -->
+                    <!-- 事件原因：填写事件原因，如客伤、水浸等 -->
                     <div class="mb-3">
-                        <label for="emergencyType" class="form-label">事件类型</label>
+                        <label for="emergencyType" class="form-label">事件原因</label>
                         <input type="text" class="form-control" id="emergencyType" required>
-                        <div class="form-text">请描述事件类型，如:客伤、水浸、舆情等。</div>
+                        <div class="form-text">请描述事件原因，如:客伤、水浸、舆情等。</div>
                     </div>
-                    <!-- 事件描述：描述事件情况 -->
+                    <!-- 影响内容：说明对运营的影响 -->
                     <div class="mb-3">
-                        <label for="emergencyDescription" class="form-label">事件描述</label>
-                        <textarea class="form-control" id="emergencyDescription" rows="3" required></textarea>
-                        <div class="form-text">描述事件情况，如:站厅B端发生客伤、站台水浸、舆情等。</div>
-                    </div>
-                    <!-- 影响情况：说明对运营的影响 -->
-                    <div class="mb-3">
-                        <label for="emergencyImpact" class="form-label">影响情况</label>
+                        <label for="emergencyImpact" class="form-label">影响内容</label>
                         <textarea class="form-control" id="emergencyImpact" rows="3" required></textarea>
                         <div class="form-text">描述事件对运营的影响，如:影响列车运行、影响乘客通行、可能造成投诉等。</div>
                     </div>
-                    <!-- 处理过程：动态多行，每行左侧为时间选择，右侧为多行输入框，右侧有删除按钮，可点击"新增"按钮添加多行 -->
+                    <!-- 关键节点：动态多行，每行左侧为时间选择，右侧为多行输入框，右侧有删除按钮，可点击"新增"按钮添加多行 -->
                     <div class="mb-3">
-                        <label class="form-label">处理过程</label>
+                        <label class="form-label">关键节点</label>
                         <div id="emergencyProcessList"></div> <!-- 动态输入行容器，每行包括时间、描述、删除按钮 -->
                         <button type="button" class="btn btn-outline-danger mt-2" id="addEmergencyProcessBtn">新增</button>
                         <div class="form-text">每一行填写"时间+内容"，可增删。例：10:00发现、10:05通知等。</div>
-                    </div>
-                    <!-- 当前状态：填写目前采取的措施 -->
-                    <div class="mb-3">
-                        <label for="emergencyStatus" class="form-label">当前状态</label>
-                        <textarea class="form-control" id="emergencyStatus" rows="3" required></textarea>
-                        <div class="form-text">描述车站当前采取的临时措施，如:安全人员值守、组织乘客绕行、关停设备等。</div>
                     </div>
                     <!-- 报告人/审核人及工号：填写相关人员信息 -->
                     <div class="mb-3">
@@ -381,11 +369,11 @@
                         <input type="datetime-local" class="form-control" id="inspectionTime" required>
                         <div class="form-text">点击图标后选择时间点击"设置"</div>
                     </div>
-                    <!-- 检查人员：填写检查人员姓名 -->
+                    <!-- 检查人员：填写检查人员姓名及检查类别 -->
                     <div class="mb-3">
-                        <label for="inspectionPersonnel" class="form-label">检查人员</label>
+                        <label for="inspectionPersonnel" class="form-label">检查人员及类别</label>
                         <input type="text" class="form-control" id="inspectionPersonnel" required>
-                        <div class="form-text">填写检查人员姓名</div>
+                        <div class="form-text">填写检查人员姓名及检查类别，如：张三（日常检查）</div>
                     </div>
                     <!-- 检查内容：动态多行，每行左侧为自动编号，右侧为多行输入框，右侧有删除按钮，可点击"新增"按钮添加多行 -->
                     <div class="mb-3">
