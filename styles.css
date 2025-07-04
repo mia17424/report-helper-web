@@ -375,3 +375,21 @@ textarea.form-control {
     color: #fff !important;
 }
 /* 保证按钮在所有分辨率下主色一致 */ 
+
+/* 拖拽排序时的高亮样式 */
+.sortable-ghost {
+    opacity: 0.6;
+    background: #ffe0e0 !important;
+    border: 2px dashed #f44336 !important;
+} 
+
+.equipment-process-row .process-index,
+.inspection-list-row .inspection-index {
+    min-width: 2.2em;
+    color: #6C4EA2;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: right;
+    margin-right: 6px;
+    display: inline-block;
+} 

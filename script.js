@@ -137,15 +137,23 @@ function generateReport() {
 function generateEquipmentReport(stationName) {
     // 收集所有处理过程（多行，每行时间+内容）
     const processRows = document.querySelectorAll('#equipmentProcessList .equipment-process-row');
-    let processText = '';
+    let processArr = [];
     processRows.forEach(row => {
         const time = row.querySelector('.process-time').value;
         const desc = row.querySelector('.process-desc').value.trim();
         if (time && desc) {
-            processText += `${time} ${desc}\n`;
+            processArr.push({time, desc});
         }
     });
-    processText = processText.trim();
+    let processText = '';
+    if(processArr.length === 1) {
+        processText = processArr[0].time + ' ' + processArr[0].desc;
+    } else {
+        processArr.forEach((item, idx) => {
+            processText += (idx+1) + '. ' + item.time + ' ' + item.desc + '\n';
+        });
+        processText = processText.trim();
+    }
     // 拼接所有内容
     return `${stationName}站报：\n一、发生时间：${formatDateTime(document.getElementById('equipmentTime').value)}\n二、发生地点：${document.getElementById('equipmentLocation').value}\n三、故障设备：${document.getElementById('equipmentName').value}\n四、故障现象：${document.getElementById('equipmentPhenomenon').value}\n五、影响内容：${document.getElementById('equipmentImpact').value}\n六、处理过程：\n${processText}\n七、当前措施：\n${document.getElementById('equipmentMeasures').value}\n八、报告人：值班员：${document.getElementById('equipmentReporter').value}（${document.getElementById('equipmentReporterId').value}）\n九、审核人：值班站长：${document.getElementById('equipmentReviewer').value}（${document.getElementById('equipmentReviewerId').value}）`;
 }
@@ -165,15 +173,23 @@ function generateEmergencyReport(stationName) {
     };
     // 收集所有处理过程（多行，每行时间+内容）
     const processRows = document.querySelectorAll('#emergencyProcessList .equipment-process-row');
-    let processText = '';
+    let processArr = [];
     processRows.forEach(row => {
         const time = row.querySelector('.process-time').value;
         const desc = row.querySelector('.process-desc').value.trim();
         if (time && desc) {
-            processText += `${time} ${desc}\n`;
+            processArr.push({time, desc});
         }
     });
-    processText = processText.trim();
+    let processText = '';
+    if(processArr.length === 1) {
+        processText = processArr[0].time + ' ' + processArr[0].desc;
+    } else {
+        processArr.forEach((item, idx) => {
+            processText += (idx+1) + '. ' + item.time + ' ' + item.desc + '\n';
+        });
+        processText = processText.trim();
+    }
     // 拼接所有内容（已去除事件描述和当前状态，处理过程已改为关键节点）
     return `${stationName}站报：\n一、发生时间：${formatDateTime(document.getElementById('emergencyTime').value)}\n二、发生地点：${document.getElementById('emergencyLocation').value}\n三、事件原因：${document.getElementById('emergencyType').value}\n四、影响内容：${document.getElementById('emergencyImpact').value}\n五、关键节点：\n${processText}\n六、报告人：值班员：${emergencyData.reporter}（${emergencyData.reporterId}）\n七、审核人：值班站长：${emergencyData.reviewer}（${emergencyData.reviewerId}）`;
 }
@@ -315,10 +331,11 @@ function generateInspectionReport(stationName) {
  * @returns {HTMLDivElement} 动态输入行
  * 作用：生成带时间选择和多行输入框的动态行
  */
-function createProcessRow(time = '', desc = '') {
+function createProcessRow(index, time = '', desc = '') {
     const row = document.createElement('div');
     row.className = 'equipment-process-row';
     row.innerHTML = `
+        <span class="process-index">${index}.</span>
         <input type="time" class="form-control process-time" value="${time}" required>
         <textarea class="form-control process-desc" placeholder="请输入描述" required style="min-height:2.4em;resize:vertical;overflow-y:auto;">${desc}</textarea>
         <button type="button" class="delete-process-btn" title="删除">✖</button>
@@ -326,6 +343,7 @@ function createProcessRow(time = '', desc = '') {
     // 删除按钮事件
     row.querySelector('.delete-process-btn').onclick = function() {
         row.remove();
+        updateProcessIndexes('equipmentProcessList');
     };
     // 绑定自适应高度
     const textarea = row.querySelector('.process-desc');
@@ -343,10 +361,11 @@ function createProcessRow(time = '', desc = '') {
  * @returns {HTMLDivElement} 动态输入行
  * 作用：生成带时间选择和多行输入框的动态行
  */
-function createEmergencyProcessRow(time = '', desc = '') {
+function createEmergencyProcessRow(index, time = '', desc = '') {
     const row = document.createElement('div');
     row.className = 'equipment-process-row';
     row.innerHTML = `
+        <span class="process-index">${index}.</span>
         <input type="time" class="form-control process-time" value="${time}" required>
         <textarea class="form-control process-desc" placeholder="请输入描述" required style="min-height:2.4em;resize:vertical;overflow-y:auto;">${desc}</textarea>
         <button type="button" class="delete-process-btn" title="删除">✖</button>
@@ -354,6 +373,7 @@ function createEmergencyProcessRow(time = '', desc = '') {
     // 删除按钮事件
     row.querySelector('.delete-process-btn').onclick = function() {
         row.remove();
+        updateProcessIndexes('emergencyProcessList');
     };
     // 绑定自适应高度
     const textarea = row.querySelector('.process-desc');
@@ -371,7 +391,10 @@ function createEmergencyProcessRow(time = '', desc = '') {
  * 作用：点击"新增"按钮时添加新的一行
  */
 function addProcessRow(time = '', desc = '') {
-    document.getElementById('equipmentProcessList').appendChild(createProcessRow(time, desc));
+    const list = document.getElementById('equipmentProcessList');
+    const index = list.children.length + 1;
+    list.appendChild(createProcessRow(index, time, desc));
+    updateProcessIndexes('equipmentProcessList');
 }
 
 /**
@@ -381,7 +404,10 @@ function addProcessRow(time = '', desc = '') {
  * 作用：点击"新增"按钮时添加新的一行
  */
 function addEmergencyProcessRow(time = '', desc = '') {
-    document.getElementById('emergencyProcessList').appendChild(createEmergencyProcessRow(time, desc));
+    const list = document.getElementById('emergencyProcessList');
+    const index = list.children.length + 1;
+    list.appendChild(createEmergencyProcessRow(index, time, desc));
+    updateProcessIndexes('emergencyProcessList');
 }
 
 // 初始化设备故障处理过程动态行和按钮
@@ -392,6 +418,15 @@ if (document.getElementById('addProcessBtn')) {
     // 页面加载时默认有一行
     if (document.getElementById('equipmentProcessList').children.length === 0) {
         addProcessRow();
+    }
+    // 拖拽排序并自动更新序号
+    if (window.Sortable) {
+        new Sortable(document.getElementById('equipmentProcessList'), {
+            animation: 150,
+            direction: 'vertical',
+            ghostClass: 'sortable-ghost',
+            onEnd: function() { updateProcessIndexes('equipmentProcessList'); }
+        });
     }
 }
 
@@ -404,6 +439,34 @@ if (document.getElementById('addEmergencyProcessBtn')) {
     if (document.getElementById('emergencyProcessList').children.length === 0) {
         addEmergencyProcessRow();
     }
+    // 拖拽排序并自动更新序号
+    if (window.Sortable) {
+        new Sortable(document.getElementById('emergencyProcessList'), {
+            animation: 150,
+            direction: 'vertical',
+            ghostClass: 'sortable-ghost',
+            onEnd: function() { updateProcessIndexes('emergencyProcessList'); }
+        });
+    }
+}
+
+// 检查汇报相关动态输入行拖拽排序
+const inspectionSortableLists = ['inspectionContentList', 'inspectionProblemsList', 'inspectionMeasuresList'];
+if (window.Sortable) {
+    inspectionSortableLists.forEach(listId => {
+        const el = document.getElementById(listId);
+        if (el) {
+            new Sortable(el, {
+                animation: 150,
+                direction: 'vertical',
+                ghostClass: 'sortable-ghost',
+                onEnd: function() {
+                    // 拖拽后自动更新序号
+                    updateInspectionIndexes(listId);
+                }
+            });
+        }
+    });
 }
 
 /**
@@ -551,3 +614,32 @@ style.innerHTML = `.fade-in{animation:fadeIn 0.5s;}
 @keyframes ripple{to{transform:scale(2.5);opacity:0;}}
 button{position:relative;overflow:hidden;}`;
 document.head.appendChild(style); 
+
+function updateProcessIndexes(listId) {
+    const list = document.getElementById(listId);
+    const rows = Array.from(list.children);
+    rows.forEach((row, idx) => {
+        const indexSpan = row.querySelector('.process-index');
+        if(indexSpan) indexSpan.textContent = (idx + 1) + '.';
+    });
+}
+
+// 拖拽后也要更新序号
+if (window.Sortable) {
+    if (document.getElementById('equipmentProcessList')) {
+        new Sortable(document.getElementById('equipmentProcessList'), {
+            animation: 150,
+            direction: 'vertical',
+            ghostClass: 'sortable-ghost',
+            onEnd: function() { updateProcessIndexes('equipmentProcessList'); }
+        });
+    }
+    if (document.getElementById('emergencyProcessList')) {
+        new Sortable(document.getElementById('emergencyProcessList'), {
+            animation: 150,
+            direction: 'vertical',
+            ghostClass: 'sortable-ghost',
+            onEnd: function() { updateProcessIndexes('emergencyProcessList'); }
+        });
+    }
+} 
