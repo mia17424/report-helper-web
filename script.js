@@ -419,15 +419,6 @@ if (document.getElementById('addProcessBtn')) {
     if (document.getElementById('equipmentProcessList').children.length === 0) {
         addProcessRow();
     }
-    // 拖拽排序并自动更新序号
-    if (window.Sortable) {
-        new Sortable(document.getElementById('equipmentProcessList'), {
-            animation: 150,
-            direction: 'vertical',
-            ghostClass: 'sortable-ghost',
-            onEnd: function() { updateProcessIndexes('equipmentProcessList'); }
-        });
-    }
 }
 
 // 初始化突发事件处理过程动态行和按钮
@@ -438,15 +429,6 @@ if (document.getElementById('addEmergencyProcessBtn')) {
     // 页面加载时默认有一行
     if (document.getElementById('emergencyProcessList').children.length === 0) {
         addEmergencyProcessRow();
-    }
-    // 拖拽排序并自动更新序号
-    if (window.Sortable) {
-        new Sortable(document.getElementById('emergencyProcessList'), {
-            animation: 150,
-            direction: 'vertical',
-            ghostClass: 'sortable-ghost',
-            onEnd: function() { updateProcessIndexes('emergencyProcessList'); }
-        });
     }
 }
 
@@ -624,22 +606,26 @@ function updateProcessIndexes(listId) {
     });
 }
 
-// 拖拽后也要更新序号
-if (window.Sortable) {
-    if (document.getElementById('equipmentProcessList')) {
-        new Sortable(document.getElementById('equipmentProcessList'), {
-            animation: 150,
-            direction: 'vertical',
-            ghostClass: 'sortable-ghost',
-            onEnd: function() { updateProcessIndexes('equipmentProcessList'); }
+// 统一拖拽排序初始化（设备故障、突发事件、检查汇报）
+document.addEventListener('DOMContentLoaded', function() {
+    const sortableLists = [
+        { id: 'equipmentProcessList', update: () => updateProcessIndexes('equipmentProcessList') },
+        { id: 'emergencyProcessList', update: () => updateProcessIndexes('emergencyProcessList') },
+        { id: 'inspectionContentList', update: () => updateInspectionIndexes('inspectionContentList') },
+        { id: 'inspectionProblemsList', update: () => updateInspectionIndexes('inspectionProblemsList') },
+        { id: 'inspectionMeasuresList', update: () => updateInspectionIndexes('inspectionMeasuresList') },
+    ];
+    if (window.Sortable) {
+        sortableLists.forEach(({id, update}) => {
+            const el = document.getElementById(id);
+            if (el) {
+                new Sortable(el, {
+                    animation: 150,
+                    direction: 'vertical',
+                    ghostClass: 'sortable-ghost',
+                    onEnd: update
+                });
+            }
         });
     }
-    if (document.getElementById('emergencyProcessList')) {
-        new Sortable(document.getElementById('emergencyProcessList'), {
-            animation: 150,
-            direction: 'vertical',
-            ghostClass: 'sortable-ghost',
-            onEnd: function() { updateProcessIndexes('emergencyProcessList'); }
-        });
-    }
-} 
+}); 
